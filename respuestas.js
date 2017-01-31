@@ -21,7 +21,7 @@ module.exports = {
   },
   identificacion: (session, response) => {
     session.send(response.result.fulfillment.speech)
-
+  },
   estadoanimo: (session, response) => {
     session.send(response.result.fulfillment.speech)
   },
