@@ -40,6 +40,9 @@ bot.dialog('/', function (session) {
       case 'infolicenciatura':
         respuestas.licenciaturas(session, response)
         break;
+      case 'identificacion':
+        respuestas.identificacion(session, response)
+        break;
       default:
       respuestas.error(session, response)
 

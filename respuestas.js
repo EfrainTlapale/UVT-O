@@ -16,9 +16,11 @@ module.exports = {
               builder.CardImage.create(session, 'http://uvtlax.com/wp-content/uploads/revslider/index_01/index_revs_02_b.jpg')
             ])
         ])
-
       session.send(licenciaturaCard)
     })
+  },
+  identificacion: (session, response) => {
+    session.send(response.result.fulfillment.speech)
   },
   error: (session, response) => {
     session.send(response.result.fulfillment.speech)
