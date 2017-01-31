@@ -43,6 +43,9 @@ bot.dialog('/', function (session) {
       case 'identificacion':
         respuestas.identificacion(session, response)
         break;
+      case 'estadoanimo':
+        respuestas.estadoanimo(session, response)
+        break;
       default:
       respuestas.error(session, response)
 
