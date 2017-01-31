@@ -1,0 +1,17 @@
+{
+  "name": "bottest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apiai": "^3.0.3",
+    "botbuilder": "^3.5.4",
+    "restify": "^4.3.0"
+  }
+}
