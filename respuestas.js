@@ -2,7 +2,7 @@ const licenciaturas = require('./data/licenciaturas')
 const builder = require('botbuilder')
 
 module.exports = {
-  saludo: (session, response) =>{
+  saludo: (session, response) => {
     session.send(response.result.fulfillment.speech)
   },
   licenciaturas: (session, response) => {
