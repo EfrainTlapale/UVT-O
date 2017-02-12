@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "apiai": "^3.0.3",
-    "botbuilder": "^3.5.4",
-    "restify": "^4.3.0"
+    "botbuilder": "^3.5.4"
   }
 }
