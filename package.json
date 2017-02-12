@@ -13,7 +13,7 @@
   "dependencies": {
     "apiai": "^3.0.3",
     "botbuilder": "^3.5.4",
-    "restify": "^4.3.0"
+    "express": "^4.14.1"
   },
   "devDependencies": {
     "eslint": "^3.15.0",
