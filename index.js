@@ -1,4 +1,4 @@
-const restify = require('restify')
+const express = require('express')
 const builder = require('botbuilder')
 
 // =========================================================
@@ -6,10 +6,11 @@ const builder = require('botbuilder')
 // =========================================================
 
 // Setup Restify Server
-const server = restify.createServer()
-server.listen(process.env.port || process.env.PORT || 3978, (err) => {
+const server = express()
+const port = process.env.port || process.env.PORT || 3978
+server.listen(port, (err) => {
   if (err) console.log('ERROR: Server not running')
-  console.log(`Server listening in port: ${server}`)
+  console.log(`Server listening in port: ${port}`)
 })
 
 // Create chat bot
