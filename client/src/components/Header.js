@@ -7,10 +7,7 @@ const Header = () => {
         <span className='mdl-layout-title'>UVT-O Admin Panel</span>
         <div className='mdl-layout-spacer' />
         <nav className='mdl-navigation mdl-layout--large-screen-only'>
-          <a className='mdl-navigation__link' href=''>Link</a>
-          <a className='mdl-navigation__link' href=''>Link</a>
-          <a className='mdl-navigation__link' href=''>Link</a>
-          <a className='mdl-navigation__link' href=''>Link</a>
+          <a className='mdl-navigation__link' href=''>Salir</a>
         </nav>
       </div>
     </header>
