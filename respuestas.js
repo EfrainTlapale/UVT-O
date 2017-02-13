@@ -2,9 +2,6 @@ const licenciaturas = require('./data/licenciaturas')
 const builder = require('botbuilder')
 
 module.exports = {
-  saludo: (session, response) => {
-    session.send(response.result.fulfillment.speech)
-  },
   licenciaturas: (session, response) => {
     licenciaturas.forEach((licenciatura) => {
       const licenciaturaCard = new builder.Message(session)
@@ -19,13 +16,7 @@ module.exports = {
       session.send(licenciaturaCard)
     })
   },
-  identificacion: (session, response) => {
-    session.send(response.result.fulfillment.speech)
-  },
-  estadoanimo: (session, response) => {
-    session.send(response.result.fulfillment.speech)
-  },
-  error: (session, response) => {
+  apiAiDefault (session, response) {
     session.send(response.result.fulfillment.speech)
   }
 }
