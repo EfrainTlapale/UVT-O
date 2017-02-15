@@ -20,6 +20,6 @@ module.exports = {
     session.send(response.result.fulfillment.speech)
   },
   hello: (session, response) => {
-    session.send(`Hola ${session.message.user.name.split(' ').slice(0,1)}`)
+    session.send(`Hola ${session.message.user.name.split(' ').slice(0, 1)}`)
   }
 }
