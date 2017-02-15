@@ -20,6 +20,11 @@ module.exports = {
     session.send(response.result.fulfillment.speech)
   },
   hello: (session, response) => {
-    session.send(`Hola ${session.message.user.name.split(' ').slice(0, 1)}`)
+    const userName = session.message.user.name.split(' ')
+    if (userName.length > 3) {
+      session.send(`${response.result.fulfillment.speech} ${userName.splice(0, 2).join(' ')}`)
+    } else {
+      session.send(`${response.result.fulfillment.speech} ${userName.splice(0, 1)}`)
+    }
   }
 }
