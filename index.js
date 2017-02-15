@@ -25,6 +25,8 @@ server.post('/api/messages', connector.listen())
 // Bots Dialogs
 // =========================================================
 
+const licenciaturas = require('./data/licenciaturas')
+
 const apiai = require('apiai')
 const ai = apiai('b0fb9d9ce53641a1aaddce07ada5109a')
 var respuestas = require('./respuestas')
@@ -43,7 +45,7 @@ bot.dialog('/', (session) => {
         respuestas.apiAiDefault(session, response)
         break
       case 'infolicenciatura':
-        respuestas.licenciaturas(session, response)
+        session.beginDialog('/licenciatura')
         break
       default:
         respuestas.apiAiDefault(session, response)
@@ -56,3 +58,26 @@ bot.dialog('/', (session) => {
 
   request.end()
 })
+
+bot.dialog('/licenciatura', [
+  function (session) {
+    const opciones = licenciaturas.map(l => l.nombre)
+    builder.Prompts.choice(session, 'Selecciona una Licenciatura para obtener mas informes', opciones, {retryPrompt: 'Intenta de nuevo', listStyle: builder.ListStyle['button']})
+  }, function (session, result) {
+    if (result.response) {
+      const [lic] = licenciaturas.filter(lic => lic.nombre === result.response.entity)
+      const licenciaturaCard = new builder.Message(session)
+      .attachments([
+        new builder.HeroCard(session)
+        .text(lic.descripcion)
+        .title(lic.nombre)
+        .images([
+          builder.CardImage.create(session, 'http://uvtlax.com/wp-content/uploads/revslider/index_01/index_revs_02_b.jpg')
+        ])
+      ])
+      session.send(licenciaturaCard)
+    } else {
+      session.endDialog()
+    }
+  }
+])
