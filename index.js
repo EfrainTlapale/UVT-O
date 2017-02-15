@@ -36,7 +36,10 @@ bot.dialog('/', (session) => {
 
   request.on('response', (response) => {
     switch (response.result.action) {
-      case 'input.welcome' || 'identificacion' || 'estadoanimo':
+      case 'input.welcome':
+        respuestas.hello(session, response)
+        break
+      case 'identificacion' || 'estadoanimo':
         respuestas.apiAiDefault(session, response)
         break
       case 'infolicenciatura':
