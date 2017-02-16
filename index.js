@@ -76,6 +76,7 @@ bot.dialog('/licenciatura', [
         ])
       ])
       session.send(licenciaturaCard)
+      session.endDialog()
     } else {
       session.endDialog()
     }
