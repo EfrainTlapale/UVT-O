@@ -65,7 +65,7 @@ bot.dialog('/licenciatura', [
     builder.Prompts.choice(session, 'Selecciona una Licenciatura para obtener mas informes', opciones, {retryPrompt: 'Intenta de nuevo', listStyle: builder.ListStyle['button']})
   }, function (session, result) {
     if (result.response) {
-      const [lic] = licenciaturas.filter(lic => lic.nombre === result.response.entity)
+      const lic = licenciaturas.find(lic => lic.nombre === result.response.entity)
       const licenciaturaCard = new builder.Message(session)
       .attachments([
         new builder.HeroCard(session)
