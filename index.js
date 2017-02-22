@@ -74,6 +74,7 @@ bot.dialog('/licenciatura', [
         .images([
           builder.CardImage.create(session, 'http://uvtlax.com/wp-content/uploads/revslider/index_01/index_revs_02_b.jpg')
         ])
+        .tap(builder.CardAction.openUrl(session, lic.link))
       ])
       session.send(licenciaturaCard)
       session.endDialog()
