@@ -47,6 +47,9 @@ bot.dialog('/', (session) => {
       case 'infolicenciatura':
         session.beginDialog('/licenciatura')
         break
+      case 'promoSticker':
+        session.beginDialog('/acertijo')
+        break
       default:
         respuestas.apiAiDefault(session, response)
     }
@@ -80,6 +83,42 @@ bot.dialog('/licenciatura', [
       session.endDialog()
     } else {
       session.endDialog()
+    }
+  }
+])
+
+const acertijos = require('./acertijos')
+bot.dialog('/acertijo', [
+  function (session) {
+    if (session.userData.intentos > 3) {
+      session.send('Perdiste tu oportunidad')
+      session.endDialog()
+    } else if (session.userData.ganador) {
+      session.send('Ya ganaste un sticker')
+      session.endDialog()
+    } else {
+      const random = Math.floor((Math.random() * acertijos.length))
+      const acertijo = acertijos[random]
+      session.userData.respuesta = acertijo.respuesta
+      builder.Prompts.text(session, acertijo.pregunta)
+    }
+  }, function (session, result) {
+    if (result.response.toLowerCase() === session.userData.respuesta) {
+      session.userData.ganador = true
+      session.send('¡Correcto!, utiliza este código xxx-xxx-xxx, muestraselo a mis creadores')
+    } else {
+      if (session.userData.intentos) {
+        session.userData.intentos = session.userData.intentos + 1
+      } else {
+        session.userData.intentos = 1
+      }
+
+      if (session.userData.intentos > 3) {
+        session.send('Demasiados intentos :(')
+        session.endDialog()
+      } else {
+        session.beginDialog('/acertijo')
+      }
     }
   }
 ])
