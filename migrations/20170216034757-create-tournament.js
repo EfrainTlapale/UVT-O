@@ -12,7 +12,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       score: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
       },
       school: {
         type: Sequelize.STRING
