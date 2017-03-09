@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('Tournaments', {
       id: {
         allowNull: false,
@@ -11,17 +11,15 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      score: {
+        type: Sequelize.STRING
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      school: {
+        type: Sequelize.STRING
       }
-    });
+    })
   },
-  down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Tournaments');
+  down: function (queryInterface, Sequelize) {
+    return queryInterface.dropTable('Tournaments')
   }
-};
+}
