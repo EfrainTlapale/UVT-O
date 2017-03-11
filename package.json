@@ -13,8 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "apiai": "^3.0.3",
+    "bcrypt": "^1.0.2",
     "botbuilder": "^3.5.4",
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "sails-mysql": "^0.11.5",
+    "waterline": "^0.11.11"
   },
   "devDependencies": {
     "eslint": "^3.15.0",
@@ -23,6 +26,5 @@
     "eslint-plugin-promise": "^3.4.1",
     "eslint-plugin-react": "^6.9.0",
     "eslint-plugin-standard": "^2.0.1"
-
   }
 }

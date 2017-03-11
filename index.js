@@ -1,12 +1,22 @@
 const express = require('express')
 const builder = require('botbuilder')
 
+const server = express()
+
+const models = require('./waterModels')
+models.waterline.initialize(models.config, (err, models) => {
+  err ? console.log('error en waterline') : console.log('todo fine con waterline')
+
+  server.models = models.collections
+})
+
+module.exports = server
+
 // =========================================================
 // Bot Setup
 // =========================================================
 
 // Setup Restify Server
-const server = express()
 const port = process.env.port || process.env.PORT || 3978
 server.listen(port, (err) => {
   if (err) console.log('ERROR: Server not running')
@@ -30,6 +40,7 @@ const licenciaturas = require('./data/licenciaturas')
 const apiai = require('apiai')
 const ai = apiai('b0fb9d9ce53641a1aaddce07ada5109a')
 var respuestas = require('./respuestas')
+const log = require('./log')
 
 bot.dialog('/', (session) => {
   const request = ai.textRequest(session.message.text, {
@@ -37,6 +48,7 @@ bot.dialog('/', (session) => {
   })
 
   request.on('response', (response) => {
+    log(session.message.text, response.result.action)
     switch (response.result.action) {
       case 'input.welcome':
         respuestas.hello(session, response)
