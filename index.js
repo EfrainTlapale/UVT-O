@@ -1,7 +1,11 @@
 const express = require('express')
 const builder = require('botbuilder')
+const bodyParser = require('body-parser')
 
 const server = express()
+
+server.use(bodyParser.urlencoded({extended: true}))
+server.use(bodyParser.json())
 
 const models = require('./waterModels')
 models.waterline.initialize(models.config, (err, models) => {
@@ -11,6 +15,8 @@ models.waterline.initialize(models.config, (err, models) => {
 })
 
 module.exports = server
+
+server.use('/api', require('./api'))
 
 // =========================================================
 // Bot Setup

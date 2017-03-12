@@ -15,7 +15,7 @@ const user = waterline.Collection.extend({
       type: 'string',
       required: 'true'
     },
-    rol: {
+    role: {
       type: 'string',
       required: true
     }

@@ -14,8 +14,11 @@
   "dependencies": {
     "apiai": "^3.0.3",
     "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
     "botbuilder": "^3.5.4",
     "express": "^4.14.1",
+    "express-jwt": "^5.1.0",
+    "jsonwebtoken": "^7.3.0",
     "sails-mysql": "^0.11.5",
     "waterline": "^0.11.11"
   },
