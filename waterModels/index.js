@@ -1,7 +1,8 @@
 const mysqlAdapter = require('sails-mysql')
 var Waterline = require('waterline')
+const dbconfig = require('../dbconfig')
 
-var orm = new Waterline()
+const orm = new Waterline()
 
 var config = {
   adapters: {
@@ -11,9 +12,9 @@ var config = {
   connections: {
     mySQL: {
       adapter: 'adapterMysql',
-      host: 'localhost',
-      user: 'root',
-      password: 'bolttake3',
+      host: dbconfig.host,
+      user: dbconfig.user,
+      password: dbconfig.password,
       database: 'uvto'
     }
   }
