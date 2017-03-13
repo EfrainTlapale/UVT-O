@@ -9,7 +9,7 @@ server.use(bodyParser.json())
 
 const models = require('./waterModels')
 models.waterline.initialize(models.config, (err, models) => {
-  err ? console.log('error en waterline') : console.log('todo bien con waterline')
+  err ? console.log(err) : console.log('todo bien con waterline')
 
   server.models = models.collections
 })
