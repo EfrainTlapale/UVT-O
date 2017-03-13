@@ -9,7 +9,7 @@ server.use(bodyParser.json())
 
 const models = require('./waterModels')
 models.waterline.initialize(models.config, (err, models) => {
-  err ? console.log('error en waterline') : console.log('todo fine con waterline')
+  err ? console.log('error en waterline') : console.log('todo bien con waterline')
 
   server.models = models.collections
 })
@@ -54,22 +54,29 @@ bot.dialog('/', (session) => {
   })
 
   request.on('response', (response) => {
-    log(session.message.text, response.result.action)
-    switch (response.result.action) {
-      case 'input.welcome':
-        respuestas.hello(session, response)
-        break
-      case 'identificacion' || 'estadoanimo':
-        respuestas.apiAiDefault(session, response)
-        break
-      case 'infolicenciatura':
-        session.beginDialog('/licenciatura')
-        break
-      case 'promoSticker':
-        session.beginDialog('/acertijo')
-        break
-      default:
-        respuestas.apiAiDefault(session, response)
+    if (session.message.text === 'cleandata') {
+      session.beginDialog('/cleandata')
+    } else {
+      log(session.message.text, response.result.action)
+      switch (response.result.action) {
+        case 'input.welcome':
+          respuestas.hello(session, response)
+          break
+        case 'identificacion' || 'estadoanimo':
+          respuestas.apiAiDefault(session, response)
+          break
+        case 'infolicenciatura':
+          session.beginDialog('/licenciatura')
+          break
+        case 'promoSticker':
+          session.beginDialog('/acertijo')
+          break
+        case 'torneoGC':
+          session.beginDialog('/torneo')
+          break
+        default:
+          respuestas.apiAiDefault(session, response)
+      }
     }
   })
 
@@ -137,6 +144,44 @@ bot.dialog('/acertijo', [
       } else {
         session.beginDialog('/acertijo')
       }
+    }
+  }
+])
+
+bot.dialog('/torneo', [
+  function (session) {
+    if (session.userData.registradoTorneo) {
+      session.endDialog('Ya estás registrado, acude al salón 3-16 para participar en el torneo')
+    } else {
+      builder.Prompts.text(session, 'Para tu registro necesito que escribas de qué escuela vienes, porfa')
+    }
+  },
+  function (session, result) {
+    server.models.score.create({name: session.message.user.name, school: result.response}).exec((err, score) => {
+      if (err) {
+        session.send('Hubo un error en tu registro :(, intenta de nuevo porfa')
+      } else {
+        session.userData.registradoTorneo = true
+        session.send('Gracias por registrarse, el torneo se realiza en el salón 3-16, consulta a mis creadores (ingenieía en sistemas) para más información')
+      }
+      session.endDialog()
+    })
+  }
+])
+
+// SOLO PARA DESARROLLO, ELIMINA LA INFO TEMPORAL DEL USUARIO
+bot.dialog('/cleandata', [
+  function (session) {
+    builder.Prompts.text(session, 'password')
+  }, function (session, result) {
+    if (result.response === 'admin17') {
+      console.log(result.response)
+      session.userData.intentos = 1
+      session.userData.ganador = false
+      session.userData.registradoTorneo = false
+      session.endDialog('data cleaned')
+    } else {
+      session.endDialog('wrong')
     }
   }
 ])

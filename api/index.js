@@ -62,6 +62,16 @@ router.get('/logs', jwtcheck, (req, res) => {
   })
 })
 
+router.get('/scores', (req, res) => {
+  server.models.score.find({}).exec((err, scores) => {
+    if (err) {
+      res.status(400).json({success: false, err})
+    } else {
+      res.json({scores})
+    }
+  })
+})
+
 // router.get('/intentions', (req, res) => {
 //   server.models.logs.query('Select distinct intention from logs;', (err, intentions) => {
 //     if (err) {
