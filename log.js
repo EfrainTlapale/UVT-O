@@ -5,6 +5,6 @@ module.exports = (message, intention) => {
     message,
     intention
   }).exec((err, score) => {
-    if (err) console.log('error al guardad desde el log')
+    if (err) console.log(err)
   })
 }
