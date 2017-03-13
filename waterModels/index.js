@@ -15,7 +15,7 @@ var config = {
       host: dbconfig.host,
       user: dbconfig.user,
       password: dbconfig.password,
-      database: 'uvto'
+      database: dbconfig.database
     }
   },
   defaults: {
