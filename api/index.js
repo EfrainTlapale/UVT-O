@@ -27,10 +27,10 @@ router.post('/login', (req, res) => {
     if (err || !user) {
       return res.status(400).json({success: false, err})
     } else {
-      bcrypt.compare(req.body.password, user.password, (err) => {
+      bcrypt.compare(req.body.password, user.password, (err, success) => {
         if (err) {
           return res.status(400).json({success: false, err})
-        } else {
+        } else if (success) {
           let jwtuser = Object.assign({}, user)
           delete jwtuser.password
           // console.log(secret)
@@ -40,6 +40,8 @@ router.post('/login', (req, res) => {
             expiresIn: '6h'
           })
           return res.json({success: true, token})
+        } else {
+          res.status(400).json({success: false})
         }
       })
     }
@@ -50,7 +52,7 @@ router.get('/protected', jwtcheck, (req, res) => {
   res.json({secret: 'data', ultra: 'topSecret'})
 })
 
-router.get('/logs', (req, res) => {
+router.get('/logs', jwtcheck, (req, res) => {
   server.models.logs.find({}).exec((err, logs) => {
     if (err) {
       res.status(400).json({success: false, err})
