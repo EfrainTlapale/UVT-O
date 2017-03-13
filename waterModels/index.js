@@ -17,6 +17,9 @@ var config = {
       password: dbconfig.password,
       database: 'uvto'
     }
+  },
+  defaults: {
+    migrate: 'safe'
   }
 }
 
