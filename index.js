@@ -7,14 +7,26 @@ const server = express()
 server.use(bodyParser.urlencoded({extended: true}))
 server.use(bodyParser.json())
 
-const models = require('./waterModels')
-models.waterline.initialize(models.config, (err, models) => {
-  err ? console.log(err) : console.log('todo bien con waterline')
+const log = require('./log')
 
-  server.models = models.collections
+// const models = require('./waterModels')
+// models.waterline.initialize(models.config, (err, models) => {
+//   err ? console.log(err) : console.log('todo bien con waterline')
+
+//   server.models = models.collections
+// })
+
+// Mongoose connection
+const mongoUri = process.env.MONGO || 'mongodb://localhost/uvto'
+const mongoose = require('mongoose')
+mongoose.Promise = global.Promise
+mongoose.connect(mongoUri, err => {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log('Connected to Mongo')
+  }
 })
-
-module.exports = server
 
 server.use('/api', require('./api'))
 
@@ -46,7 +58,6 @@ const licenciaturas = require('./data/licenciaturas')
 const apiai = require('apiai')
 const ai = apiai('b0fb9d9ce53641a1aaddce07ada5109a')
 var respuestas = require('./respuestas')
-const log = require('./log')
 
 bot.dialog('/', (session) => {
   const request = ai.textRequest(session.message.text, {
@@ -57,7 +68,7 @@ bot.dialog('/', (session) => {
     if (session.message.text === 'cleandata') {
       session.beginDialog('/cleandata')
     } else {
-      log(session.message.text, response.result.action)
+      log(session.message.text, response.result.metadata.intentName)
       switch (response.result.action) {
         case 'input.welcome':
           respuestas.hello(session, response)

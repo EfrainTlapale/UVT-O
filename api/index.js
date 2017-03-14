@@ -1,31 +1,31 @@
 const router = require('express').Router()
-const server = require('../index')
+// const server = require('../index')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const {secret} = require('../dbconfig')
 const expressjwt = require('express-jwt')
+const User = require('../mongoModels/user')
+const Log = require('../mongoModels/log')
+const Score = require('../mongoModels/score')
 
 const jwtcheck = expressjwt({secret: secret})
 
 router.route('/signup')
   .post((req, res) => {
-    server.models.users.create(
-      Object.assign({}, req.body)
-    ).exec((err, user) => {
+    const user = new User(req.body)
+    user.save(err => {
       if (err) {
-        return res.status(400).json({success: false, err})
+        res.status(400).json({success: false, err})
       } else {
-        return res.json({success: true, user})
+        res.json({success: true, user})
       }
     })
   })
 
 router.post('/login', (req, res) => {
-  server.models.users.findOne({
-    username: req.body.username
-  }).exec((err, user) => {
-    if (err || !user) {
-      return res.status(400).json({success: false, err})
+  User.findOne({username: req.body.username}, (err, user) => {
+    if (err) {
+      res.status(200).json({success: false, err})
     } else {
       bcrypt.compare(req.body.password, user.password, (err, success) => {
         if (err) {
@@ -53,7 +53,7 @@ router.get('/protected', jwtcheck, (req, res) => {
 })
 
 router.get('/logs', jwtcheck, (req, res) => {
-  server.models.logs.find({}).exec((err, logs) => {
+  Log.find({}, (err, logs) => {
     if (err) {
       res.status(400).json({success: false, err})
     } else {
@@ -63,7 +63,7 @@ router.get('/logs', jwtcheck, (req, res) => {
 })
 
 router.get('/scores', (req, res) => {
-  server.models.score.find({}).exec((err, scores) => {
+  Score.find({}, (err, scores) => {
     if (err) {
       res.status(400).json({success: false, err})
     } else {

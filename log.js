@@ -1,10 +1,13 @@
-const server = require('./index')
+const Log = require('./mongoModels/log')
 
 module.exports = (message, intention) => {
-  server.models.logs.create({
+  const log = new Log({
     message,
     intention
-  }).exec((err, score) => {
-    if (err) console.log(err)
+  })
+  log.save(err => {
+    if (err) {
+      console.log(err)
+    }
   })
 }
