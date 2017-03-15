@@ -49,6 +49,15 @@ const connector = new builder.ChatConnector({
 const bot = new builder.UniversalBot(connector)
 server.post('/api/messages', connector.listen())
 
+const path = require('path')
+
+server.use(express.static(path.resolve(__dirname, 'build')))
+
+// Always return the main index.html, so react-router render the route in the client
+server.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
+})
+
 // =========================================================
 // Bots Dialogs
 // =========================================================
@@ -84,6 +93,9 @@ bot.dialog('/', (session) => {
           break
         case 'torneoGC':
           session.beginDialog('/torneo')
+          break
+        case 'pack':
+          respuestas.pack(session)
           break
         default:
           respuestas.apiAiDefault(session, response)

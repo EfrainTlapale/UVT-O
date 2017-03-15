@@ -26,5 +26,15 @@ module.exports = {
     } else {
       session.send(`${response.result.fulfillment.speech} ${userName.splice(0, 1)}`)
     }
+  },
+  pack: (session) => {
+    const packCard = new builder.Message(session)
+      .attachments([
+        new builder.HeroCard(session)
+          .text('SHHHHHHH, queda entre nosotros ;)')
+          .images([builder.CardImage.create(session, 'https://mvideos.stanford.edu/Images/DestinyImages/Graduate%20Certificate%20Images/460X259/ElectronicCircuitsGraduateCertificate_MAIN.jpg')])
+      ])
+
+    session.send(packCard)
   }
 }
