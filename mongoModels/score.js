@@ -9,7 +9,10 @@ const Score = new mongoose.Schema({
     type: String,
     required: true
   },
-  score: Number
+  score: {
+    type: Number,
+    default: 0
+  }
 })
 
 module.exports = mongoose.model('Score', Score)

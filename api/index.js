@@ -72,6 +72,16 @@ router.get('/scores', (req, res) => {
   })
 })
 
+router.put('/scores', jwtcheck, (req, res) => {
+  Score.findByIdAndUpdate(req.body.id, {score: req.body.newScore}, (err, score) => {
+    if (err || !score) {
+      res.status(400).json({success: false, err})
+    } else {
+      res.json({success: true})
+    }
+  })
+})
+
 // router.get('/intentions', (req, res) => {
 //   server.models.logs.query('Select distinct intention from logs;', (err, intentions) => {
 //     if (err) {

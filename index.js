@@ -159,6 +159,8 @@ bot.dialog('/acertijo', [
   }
 ])
 
+const Score = require('./mongoModels/score')
+
 bot.dialog('/torneo', [
   function (session) {
     if (session.userData.registradoTorneo) {
@@ -168,7 +170,11 @@ bot.dialog('/torneo', [
     }
   },
   function (session, result) {
-    server.models.score.create({name: session.message.user.name, school: result.response}).exec((err, score) => {
+    const score = new Score({
+      name: session.message.user.name,
+      school: result.response
+    })
+    score.save(err => {
       if (err) {
         session.send('Hubo un error en tu registro :(, intenta de nuevo porfa')
       } else {
