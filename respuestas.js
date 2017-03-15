@@ -1,5 +1,6 @@
 const licenciaturas = require('./data/licenciaturas')
 const builder = require('botbuilder')
+const Score = require('./mongoModels/score')
 
 module.exports = {
   licenciaturas: (session, response) => {
@@ -10,7 +11,7 @@ module.exports = {
             .text(licenciatura.descripcion)
             .title(licenciatura.nombre)
             .images([
-              builder.CardImage.create(session, 'http://uvtlax.com/wp-content/uploads/revslider/index_01/index_revs_02_b.jpg')
+              builder.CardImage.create(session, licenciatura.img)
             ])
         ])
       session.send(licenciaturaCard)
@@ -36,5 +37,15 @@ module.exports = {
       ])
 
     session.send(packCard)
+  },
+  highScore: (session) => {
+    const maxScore = Score.findOne({}).sort(({score: -1})).limit(1)
+    maxScore.exec(function (err, maxResult) {
+      if (err) {
+        session.send('No pude encontrar la puntuación mas alta :( intenta en otro ratón')
+      } else {
+        session.send(`La puntiación más alta la tiene ${maxResult.name} con ${maxResult.score}`)
+      }
+    })
   }
 }

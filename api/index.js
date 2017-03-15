@@ -82,6 +82,17 @@ router.put('/scores', jwtcheck, (req, res) => {
   })
 })
 
+router.get('/highscore', (req, res) => {
+  const maxScore = Score.findOne({}).sort(({score: -1})).limit(1)
+  maxScore.exec(function (err, maxResult) {
+    if (err) {
+      res.status(400).json({success: false, err})
+    } else {
+      res.json({maxResult})
+    }
+  })
+})
+
 // router.get('/intentions', (req, res) => {
 //   server.models.logs.query('Select distinct intention from logs;', (err, intentions) => {
 //     if (err) {

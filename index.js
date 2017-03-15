@@ -85,7 +85,7 @@ bot.dialog('/', (session) => {
         case 'identificacion' || 'estadoanimo':
           respuestas.apiAiDefault(session, response)
           break
-        case 'infolicenciatura':
+        case 'infolicenciatura' || 'licenciaturaespecifica':
           session.beginDialog('/licenciatura')
           break
         case 'promoSticker':
@@ -96,6 +96,9 @@ bot.dialog('/', (session) => {
           break
         case 'pack':
           respuestas.pack(session)
+          break
+        case 'highscore':
+          respuestas.highScore(session)
           break
         default:
           respuestas.apiAiDefault(session, response)
