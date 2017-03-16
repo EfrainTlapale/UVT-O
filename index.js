@@ -155,8 +155,9 @@ bot.dialog('/acertijo', [
     }
   }, function (session, result) {
     if (result.response.toLowerCase() === session.userData.respuesta) {
+      const code = Date.now()
       session.userData.ganador = true
-      session.send('¡Correcto!, utiliza este código xxx-xxx-xxx, muestraselo a mis creadores')
+      session.send(`¡Correcto!, utiliza este código ${code}, muestraselo a mis creadores`)
     } else {
       if (session.userData.intentos) {
         session.userData.intentos = session.userData.intentos + 1
@@ -181,7 +182,7 @@ bot.dialog('/torneo', [
     if (session.userData.registradoTorneo) {
       session.endDialog('Ya estás registrado, acude al salón 3-16 para participar en el torneo')
     } else {
-      builder.Prompts.text(session, 'Para tu registro necesito que escribas de qué escuela vienes, porfa')
+      builder.Prompts.text(session, 'Para tu registro necesito que a continuación escribas el nombre de tu escuela, porfa')
     }
   },
   function (session, result) {
