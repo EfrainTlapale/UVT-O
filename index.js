@@ -126,7 +126,7 @@ bot.dialog('/licenciatura', [
         .text(lic.descripcion)
         .title(lic.nombre)
         .images([
-          builder.CardImage.create(session, 'http://uvtlax.com/wp-content/uploads/revslider/index_01/index_revs_02_b.jpg')
+          builder.CardImage.create(session, lic.img)
         ])
         .tap(builder.CardAction.openUrl(session, lic.link))
       ])
