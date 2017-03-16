@@ -54,7 +54,9 @@ module.exports = {
         new builder.HeroCard()
           .text('Pulsa o da click para abrir en Google Maps')
           .title('Ubicación')
-          .images(builder.CardImage.create(session, 'http://es.tinypic.com/view.php?pic=sdhcnl&s=9#.WMr3mojyvVM'))
+          .images([
+            builder.CardImage.create(session, 'http://i66.tinypic.com/sdhcnl.jpg')
+          ])
           .tap(builder.CardAction.openUrl(session, 'https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.google.com%2Fmaps%3Fll%3D19.407639%252C-98.114006%26z%3D18%26t%3Dm%26hl%3Des-US%26gl%3DMX%26mapclient%3Dembed%26cid%3D2446350351016656415&h=ATO4cMXSeYrKGFYg4YEM83urXAyaSrYTje2XUW7HUgfx9t584kqZHKRgMycBwTNMl2v49Mji5VqJ3pzAVleCqCp7jzCmGv0L4Hlj_BYwVU4967irPbiARJers1U3KA'))
       ])
     session.send(ubicacion)

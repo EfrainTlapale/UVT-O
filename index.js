@@ -100,6 +100,9 @@ bot.dialog('/', (session) => {
         case 'highscore':
           respuestas.highScore(session)
           break
+        case 'ubicacion':
+          respuestas.ubicacion(session)
+          break
         default:
           respuestas.apiAiDefault(session, response)
       }
@@ -161,16 +164,15 @@ bot.dialog('/acertijo', [
     } else {
       if (session.userData.intentos) {
         session.userData.intentos = session.userData.intentos + 1
-        session.send('Respuesta equivocada, intenta de nuevo ;)')
       } else {
         session.userData.intentos = 1
-        session.send('Respuesta equivocada, intenta de nuevo ;)')
       }
 
       if (session.userData.intentos > 3) {
         session.send('Demasiados intentos :(')
         session.endDialog()
       } else {
+        session.send('Respuesta equivocada, intenta de nuevo ;)')
         session.beginDialog('/acertijo')
       }
     }
