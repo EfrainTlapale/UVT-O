@@ -161,8 +161,10 @@ bot.dialog('/acertijo', [
     } else {
       if (session.userData.intentos) {
         session.userData.intentos = session.userData.intentos + 1
+        session.send('Respuesta equivocada, intenta de nuevo ;)')
       } else {
         session.userData.intentos = 1
+        session.send('Respuesta equivocada, intenta de nuevo ;)')
       }
 
       if (session.userData.intentos > 3) {
@@ -195,7 +197,7 @@ bot.dialog('/torneo', [
         session.send('Hubo un error en tu registro :(, intenta de nuevo porfa')
       } else {
         session.userData.registradoTorneo = true
-        session.send('Gracias por registrarse, el torneo se realiza en el salón 3-16, consulta a mis creadores (ingenieía en sistemas) para más información')
+        session.send('Gracias por registrarse, el torneo se realiza en el salón 3-16, consulta a mis creadores (ingeniería en sistemas) para más información')
       }
       session.endDialog()
     })
