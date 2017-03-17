@@ -157,7 +157,7 @@ bot.dialog('/acertijo', [
       builder.Prompts.text(session, acertijo.pregunta)
     }
   }, function (session, result) {
-    if (result.response.toLowerCase() === session.userData.respuesta) {
+    if (result.response.toLowerCase().trim() === session.userData.respuesta) {
       const code = Date.now()
       session.userData.ganador = true
       session.send(`¡Correcto!, utiliza este código ${code}, muestraselo a mis creadores`)
