@@ -31,14 +31,13 @@ router.post('/login', (req, res) => {
         if (err) {
           return res.status(400).json({success: false, err})
         } else if (success) {
-          let jwtuser = Object.assign({}, user)
-          delete jwtuser.password
+          user.password = undefined
           // console.log(secret)
           const token = jwt.sign({
+            // horas minutos segundos milesimas
+            exp: Date.now() + (1 * 60 * 60 * 1000),
             user
-          }, secret, {
-            expiresIn: '6h'
-          })
+          }, secret)
           return res.json({success: true, token})
         } else {
           res.status(400).json({success: false})

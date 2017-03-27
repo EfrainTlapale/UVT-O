@@ -68,6 +68,38 @@ const apiai = require('apiai')
 const ai = apiai('b0fb9d9ce53641a1aaddce07ada5109a')
 var respuestas = require('./respuestas')
 
+function processMessage (response, session) {
+  log(session.message.text, response.result.metadata.intentName)
+  switch (response.result.action) {
+    case 'input.welcome':
+      respuestas.hello(session, response)
+      break
+    case 'identificacion' || 'estadoanimo':
+      respuestas.apiAiDefault(session, response)
+      break
+    case 'infolicenciatura' || 'licenciaturaespecifica':
+      session.beginDialog('/licenciatura')
+      break
+    case 'promoSticker':
+      session.beginDialog('/acertijo')
+      break
+    case 'torneoGC':
+      session.beginDialog('/torneo')
+      break
+    case 'pack':
+      respuestas.pack(session)
+      break
+    case 'highscore':
+      respuestas.highScore(session)
+      break
+    case 'ubicacion':
+      respuestas.ubicacion(session)
+      break
+    default:
+      respuestas.apiAiDefault(session, response)
+  }
+}
+
 bot.dialog('/', (session) => {
   const request = ai.textRequest(session.message.text, {
     sessionId: 'something'
@@ -77,35 +109,7 @@ bot.dialog('/', (session) => {
     if (session.message.text === 'cleandata') {
       session.beginDialog('/cleandata')
     } else {
-      log(session.message.text, response.result.metadata.intentName)
-      switch (response.result.action) {
-        case 'input.welcome':
-          respuestas.hello(session, response)
-          break
-        case 'identificacion' || 'estadoanimo':
-          respuestas.apiAiDefault(session, response)
-          break
-        case 'infolicenciatura' || 'licenciaturaespecifica':
-          session.beginDialog('/licenciatura')
-          break
-        case 'promoSticker':
-          session.beginDialog('/acertijo')
-          break
-        case 'torneoGC':
-          session.beginDialog('/torneo')
-          break
-        case 'pack':
-          respuestas.pack(session)
-          break
-        case 'highscore':
-          respuestas.highScore(session)
-          break
-        case 'ubicacion':
-          respuestas.ubicacion(session)
-          break
-        default:
-          respuestas.apiAiDefault(session, response)
-      }
+      processMessage(response, session)
     }
   })
 
@@ -119,9 +123,10 @@ bot.dialog('/', (session) => {
 bot.dialog('/licenciatura', [
   function (session) {
     const opciones = licenciaturas.map(l => l.nombre)
-    builder.Prompts.choice(session, 'Selecciona una Licenciatura para obtener mas informes', opciones, {retryPrompt: 'Intenta de nuevo', listStyle: builder.ListStyle['button']})
+    builder.Prompts.choice(session, 'Selecciona una Licenciatura para obtener mas informes', opciones, {retryPrompt: 'Intenta de nuevo', listStyle: builder.ListStyle['button'], maxRetries: 0})
   }, function (session, result) {
     if (result.response) {
+      console.log(session)
       const lic = licenciaturas.find(lic => lic.nombre === result.response.entity)
       const licenciaturaCard = new builder.Message(session)
       .attachments([
@@ -136,7 +141,7 @@ bot.dialog('/licenciatura', [
       session.send(licenciaturaCard)
       session.endDialog()
     } else {
-      session.endDialog()
+      processMessage()
     }
   }
 ])
