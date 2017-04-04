@@ -126,7 +126,6 @@ bot.dialog('/licenciatura', [
     builder.Prompts.choice(session, 'Selecciona una Licenciatura para obtener mas informes', opciones, {retryPrompt: 'Intenta de nuevo', listStyle: builder.ListStyle['button'], maxRetries: 0})
   }, function (session, result) {
     if (result.response) {
-      console.log(session)
       const lic = licenciaturas.find(lic => lic.nombre === result.response.entity)
       const licenciaturaCard = new builder.Message(session)
       .attachments([
@@ -141,7 +140,7 @@ bot.dialog('/licenciatura', [
       session.send(licenciaturaCard)
       session.endDialog()
     } else {
-      processMessage()
+      session.beginDialog('/')
     }
   }
 ])
