@@ -24,8 +24,8 @@ router.route('/signup')
 
 router.post('/login', (req, res) => {
   User.findOne({username: req.body.username}, (err, user) => {
-    if (err) {
-      res.status(200).json({success: false, err})
+    if (err || !user) {
+      res.status(401).json({success: false, err})
     } else {
       bcrypt.compare(req.body.password, user.password, (err, success) => {
         if (err) {
