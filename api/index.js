@@ -7,6 +7,7 @@ const expressjwt = require('express-jwt')
 const User = require('../mongoModels/user')
 const Log = require('../mongoModels/log')
 const Score = require('../mongoModels/score')
+const Evento = require('../mongoModels/evento')
 
 const jwtcheck = expressjwt({secret: secret})
 
@@ -92,14 +93,25 @@ router.get('/highscore', (req, res) => {
   })
 })
 
-// router.get('/intentions', (req, res) => {
-//   server.models.logs.query('Select distinct intention from logs;', (err, intentions) => {
-//     if (err) {
-//       res.status(400).json({err})
-//     } else {
-//       res.json({intentions})
-//     }
-//   })
-// })
+router.post('/evento', (req, res) => {
+  const evento = new Evento(req.body)
+  evento.save(err => {
+    if (err) {
+      res.status(400).json({success: false, err})
+    } else {
+      res.json({success: true, evento})
+    }
+  })
+})
+
+router.get('/evento', jwtcheck, (req, res) => {
+  Evento.find({}, (err, eventos) => {
+    if (err) {
+      res.status(400).json({err})
+    } else {
+      res.json({eventos})
+    }
+  })
+})
 
 module.exports = router
