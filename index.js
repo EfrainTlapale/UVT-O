@@ -88,7 +88,7 @@ function processMessage (response, session) {
     case 'ubicacion':
       respuestas.ubicacion(session)
       break
-    case 'evento': 
+    case 'evento':
       session.beginDialog('/eventos')
       break
     default:
@@ -99,13 +99,9 @@ function processMessage (response, session) {
 const evento = require('./mongoModels/evento')
 
 bot.dialog('/', (session) => {
-  if (session.message.text === 'eventos') {
-    session.beginDialog('/eventos')
-  }
   const request = ai.textRequest(session.message.text, {
     sessionId: 'something'
   })
-
   request.on('response', (response) => {
     if (session.message.text === 'cleandata') {
       session.beginDialog('/cleandata')
@@ -131,7 +127,7 @@ bot.dialog('/eventos', [
         session.endDialog('Error al cargar los eventos')
       } else {
         const opciones = eventos.filter(e => new Date(e.fecha) > new Date()).map(e => e.nombre)
-        builder.Prompts.choice(session, 'Selecciona un evento para obtener más información', opciones)
+        builder.Prompts.choice(session, 'Selecciona un evento para obtener más información', opciones, {retryPrompt: 'Intenta de nuevo', listStyle: builder.ListStyle['button'], maxRetries: 0})
       }
     })
   }, function (session, result) {
@@ -142,6 +138,7 @@ bot.dialog('/eventos', [
         } else {
           console.log(e)
           session.send('Nombre: ' + e.nombre + '\n' + ', Descripción: ' + e.descripcion + '\n' + ', Lugar: ' + e.lugar + '\n' + ', Fecha ' + moment(e.fecha).format('LL'))
+          session.endDialog()
         }
       })
     } else {
