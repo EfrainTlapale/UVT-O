@@ -105,7 +105,7 @@ router.post('/evento', (req, res) => {
 })
 
 router.get('/evento', jwtcheck, (req, res) => {
-  Evento.find({}, (err, eventos) => {
+  Evento.find({}).sort('-fecha').exec((err, eventos) => {
     if (err) {
       res.status(400).json({err})
     } else {

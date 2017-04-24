@@ -9,13 +9,6 @@ server.use(bodyParser.json())
 
 const log = require('./log')
 
-// const models = require('./waterModels')
-// models.waterline.initialize(models.config, (err, models) => {
-//   err ? console.log(err) : console.log('todo bien con waterline')
-
-//   server.models = models.collections
-// })
-
 // Mongoose connection
 const mongoUri = process.env.MONGO || 'mongodb://localhost/uvto'
 const mongoose = require('mongoose')
@@ -43,8 +36,8 @@ server.listen(port, (err) => {
 
 // Create chat bot
 const connector = new builder.ChatConnector({
-  appId: 'aa4984b4-2f36-4be4-864d-1b5d013cbc89',
-  appPassword: 'dawCxefqAiqrzPOeyX0SF6k'
+  // appId: 'aa4984b4-2f36-4be4-864d-1b5d013cbc89',
+  // appPassword: 'dawCxefqAiqrzPOeyX0SF6k'
 })
 const bot = new builder.UniversalBot(connector)
 server.post('/api/messages', connector.listen())
@@ -95,12 +88,20 @@ function processMessage (response, session) {
     case 'ubicacion':
       respuestas.ubicacion(session)
       break
+    case 'evento': 
+      session.beginDialog('/eventos')
+      break
     default:
       respuestas.apiAiDefault(session, response)
   }
 }
 
+const evento = require('./mongoModels/evento')
+
 bot.dialog('/', (session) => {
+  if (session.message.text === 'eventos') {
+    session.beginDialog('/eventos')
+  }
   const request = ai.textRequest(session.message.text, {
     sessionId: 'something'
   })
@@ -119,6 +120,35 @@ bot.dialog('/', (session) => {
 
   request.end()
 })
+
+const moment = require('moment')
+moment.locale('es')
+
+bot.dialog('/eventos', [
+  function (session) {
+    evento.find({}, (err, eventos) => {
+      if (err) {
+        session.endDialog('Error al cargar los eventos')
+      } else {
+        const opciones = eventos.filter(e => new Date(e.fecha) > new Date()).map(e => e.nombre)
+        builder.Prompts.choice(session, 'Selecciona un evento para obtener más información', opciones)
+      }
+    })
+  }, function (session, result) {
+    if (result.response) {
+      evento.findOne({nombre: result.response.entity}, (err, e) => {
+        if (err || !e) {
+          session.endDialog('Error al encontrar evento')
+        } else {
+          console.log(e)
+          session.send('Nombre: ' + e.nombre + '\n' + ', Descripción: ' + e.descripcion + '\n' + ', Lugar: ' + e.lugar + '\n' + ', Fecha ' + moment(e.fecha).format('LL'))
+        }
+      })
+    } else {
+      session.beginDialog('/')
+    }
+  }
+])
 
 bot.dialog('/licenciatura', [
   function (session) {
@@ -216,7 +246,6 @@ bot.dialog('/cleandata', [
     builder.Prompts.text(session, 'password')
   }, function (session, result) {
     if (result.response === 'admin17') {
-      console.log(result.response)
       session.userData.intentos = 1
       session.userData.ganador = false
       session.userData.registradoTorneo = false
