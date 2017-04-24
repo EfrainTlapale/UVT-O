@@ -36,7 +36,7 @@ router.post('/login', (req, res) => {
           // console.log(secret)
           const token = jwt.sign({
             // horas minutos segundos milesimas
-            exp: Date.now() + (1 * 60 * 60 * 1000),
+            exp: Date.now() + (2 * 60 * 60 * 1000),
             user
           }, secret)
           return res.json({success: true, token})
