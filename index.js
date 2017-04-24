@@ -36,8 +36,8 @@ server.listen(port, (err) => {
 
 // Create chat bot
 const connector = new builder.ChatConnector({
-  // appId: 'aa4984b4-2f36-4be4-864d-1b5d013cbc89',
-  // appPassword: 'dawCxefqAiqrzPOeyX0SF6k'
+  appId: 'aa4984b4-2f36-4be4-864d-1b5d013cbc89',
+  appPassword: 'dawCxefqAiqrzPOeyX0SF6k'
 })
 const bot = new builder.UniversalBot(connector)
 server.post('/api/messages', connector.listen())
